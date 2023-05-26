@@ -27,3 +27,10 @@ RUN set -xe && \
         ${PWD}/cphalcon-${PHALCON_VERSION} \
     && \
     php -m
+RUN apt-get update
+
+RUN apt-get install -y libcurl4-openssl-dev ssh nano pkg-config libssl-dev
+
+RUN pecl install mongodb xdebug
+
+RUN echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/mongodb.ini     

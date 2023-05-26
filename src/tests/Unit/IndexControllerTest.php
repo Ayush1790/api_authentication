@@ -4,45 +4,40 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use MyApp\Controllers\IndexController;
-use MyApp\Models\Users;
+use MyApp\Component\Product;
 
 class IndexControllerTest extends AbstractUnitTest
 //class UnitTest extends \PHPUnit\Framework\TestCase
 {
 
-    public function testController()
+    public function testadd()
     {
-        $new = new IndexController();
-        $res = $new->addData("Ayush", 'ayush$gmail.com', 1234);
-        $this->assertEquals($res, true, "pass");
-        $this->assertFalse($new->addData("ayush", "", 1), "success");
-        $res = $new->deleteData(9);
-        $this->assertEquals($res, true, "pass");
-    }
-    public function testModel()
-    {
-        $user = new Users();
-        $user->name = 'satyam';
-        $user->email = 'satyam$gmail.com';
-        $user->pswd = 123;
-        $res = $user->save();
-        $this->assertEquals($res, 1, "pass");
-        $res = $user->delete(11);
-        $this->assertEquals($res, 1, "pass");
+        $new = new Product();
+        $data = [
+            'id' => 10,
+            'name' => 'mobile',
+            'price' => 100,
+            'qty' => 20,
+            'desc' => 'xyz'
+        ];
+        $this->assertEquals(1, $new->add($data), "pass");
     }
 
-    public function testEmail()
+    public function testdelete()
     {
-        $new = new IndexController();
-        $this->assertTrue($new->emailValidator("aysuh@gmail.com"), "pass");
-        $this->assertTrue($new->emailValidator("a@gmail.com"), "pass");
-        $this->assertTrue($new->emailValidator("aysuh@redifmail.com"), "pass");
-        $this->assertTrue($new->emailValidator("aysuh@gmail.in"), "pass");
-        $this->assertFalse($new->emailValidator("aysuhgmail.in"), "pass");
-        $this->assertFalse($new->emailValidator("aysuhgmail.in"), "pass");
-        $this->assertFalse($new->emailValidator("aysuhgmailin"), "pass");
-        $this->assertFalse($new->emailValidator("@gmail.in"), "pass");
-        $this->assertFalse($new->emailValidator(""), "pass");
+        $new = new Product();
+        $this->assertEquals(1, $new->delete("1"), "pass");
+    }
+    public function testupdate()
+    {
+        $new = new Product();
+        $data = [
+            'id' => 2,
+            'name' => 'mobile2',
+            'price' => 100,
+            'qty' => 20,
+            'desc' => 'xyz'
+        ];
+        $this->assertEquals(1, $new->update($data), "pass");
     }
 }

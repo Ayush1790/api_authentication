@@ -7,7 +7,6 @@ use Phalcon\Mvc\Application;
 use Phalcon\Url;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Config;
-use Phalcon\Events\Manager;
 use Phalcon\Mvc\Dispatcher;
 
 $config = new Config([]);
@@ -30,10 +29,11 @@ $loader->registerNamespaces(
         'MyApp\Handlers' => APP_PATH . '/handlers/',
         'MyApp\Controllers' => APP_PATH . '/controllers/',
         'MyApp\Models' => APP_PATH . '/models/',
+        'MyApp\Assets' => APP_PATH . '/assets/',
         'Tests' => APP_PATH . '/../tests/',
+        'MyApp\Component' => APP_PATH . '/component/',
     ]
 );
-
 $loader->register();
 
 $container = new FactoryDefault();
@@ -56,20 +56,16 @@ $container->set(
     }
 );
 
-$container->set(
-    'db',
-    function () {
-        return new Mysql(
-            [
-                'host'     => 'mysql-server',
-                'username' => 'root',
-                'password' => 'secret',
-                'dbname'   => 'phalt',
-            ]
-        );
-    }
-);
 
+$container->set(
+    'mongo',
+    function () {
+        $mongo = new MongoDB\Client('mongodb+srv://myAtlasDBUser:myatlas-001@myatlas' .
+            'clusteredu.aocinmp.mongodb.net/?retryWrites=true&w=majority');
+        return $mongo->store;
+    },
+    true
+);
 $container->set(
     'dispatcher',
     function () {
@@ -83,7 +79,6 @@ $container->set(
     }
 );
 $application = new Application($container);
-
 try {
     // Handle the request
     $response = $application->handle(
